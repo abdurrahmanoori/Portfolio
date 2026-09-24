@@ -2,35 +2,47 @@
   const root = document.documentElement;
   const navToggle = document.querySelector(".nav-toggle");
   const navMenu = document.querySelector(".nav-menu");
-  const themeToggle = document.querySelector(".theme-toggle");
+  const themeOptions = document.querySelectorAll("[data-theme-option]");
   const header = document.querySelector(".site-header");
   const year = document.querySelector("#year");
-
   const themeColor = document.querySelector('meta[name="theme-color"]');
+  const systemTheme = window.matchMedia("(prefers-color-scheme: dark)");
 
-  const syncThemeControl = () => {
-    const isDark = root.dataset.theme === "dark";
-    const icon = themeToggle?.querySelector(".theme-icon");
-    const label = themeToggle?.querySelector(".theme-label");
+  const applyTheme = (preference) => {
+    const effectiveTheme =
+      preference === "system" ? (systemTheme.matches ? "dark" : "light") : preference;
 
-    if (icon) icon.textContent = isDark ? "☀" : "☾";
-    if (label) label.textContent = isDark ? "Light" : "Dark";
-    if (themeToggle) {
-      const action = isDark ? "Switch to light mode" : "Switch to dark mode";
-      themeToggle.setAttribute("aria-label", action);
-      themeToggle.setAttribute("title", action);
+    root.dataset.themePreference = preference;
+    root.dataset.theme = effectiveTheme;
+
+    themeOptions.forEach(button => {
+      const isActive = button.dataset.themeOption === preference;
+      button.classList.toggle("active", isActive);
+      button.setAttribute("aria-pressed", String(isActive));
+    });
+
+    if (themeColor) {
+      themeColor.setAttribute("content", effectiveTheme === "dark" ? "#090d18" : "#f7f8fb");
     }
-    if (themeColor) themeColor.setAttribute("content", isDark ? "#090d18" : "#f7f8fb");
   };
 
-  root.dataset.theme = localStorage.getItem("portfolio-theme") || "light";
-  syncThemeControl();
+  let themePreference = localStorage.getItem("portfolio-theme") || "system";
+  if (!["system", "light", "dark"].includes(themePreference)) {
+    themePreference = "system";
+  }
 
-  themeToggle?.addEventListener("click", () => {
-    const nextTheme = root.dataset.theme === "dark" ? "light" : "dark";
-    root.dataset.theme = nextTheme;
-    localStorage.setItem("portfolio-theme", nextTheme);
-    syncThemeControl();
+  applyTheme(themePreference);
+
+  themeOptions.forEach(button => {
+    button.addEventListener("click", () => {
+      themePreference = button.dataset.themeOption;
+      localStorage.setItem("portfolio-theme", themePreference);
+      applyTheme(themePreference);
+    });
+  });
+
+  systemTheme.addEventListener?.("change", () => {
+    if (themePreference === "system") applyTheme("system");
   });
 
   navToggle?.addEventListener("click", () => {

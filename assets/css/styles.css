@@ -29,6 +29,22 @@
   --shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
 }
 
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not([data-theme="dark"]) {
+    --bg: #090d18;
+    --surface: #0f1628;
+    --surface-2: #151d31;
+    --text: #eef2ff;
+    --muted: #a8b0c2;
+    --line: rgba(255, 255, 255, 0.10);
+    --brand: #8586ff;
+    --brand-2: #b273ff;
+    --accent: #4ad7cf;
+    --header: rgba(9, 13, 24, 0.78);
+    --shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+  }
+}
+
 * { box-sizing: border-box; }
 
 html {

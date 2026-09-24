@@ -4,7 +4,10 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="Portfolio of Abdurrahman Noori, a .NET and full-stack software developer focused on reliable web applications, databases, and enterprise systems." />
-  <meta name="theme-color" content="#0b1020" />
+  <meta name="theme-color" content="#f7f8fb" />
+  <script>
+    document.documentElement.dataset.theme = localStorage.getItem("portfolio-theme") || "light";
+  </script>
   <title>Abdurrahman Noori | Software Developer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -32,8 +35,9 @@
           <a href="#projects">Projects</a>
           <a href="#experience">Experience</a>
           <a href="#contact">Contact</a>
-          <button class="theme-toggle" type="button" aria-label="Toggle color theme" title="Toggle color theme">
-            <span aria-hidden="true">◐</span>
+          <button class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch to dark mode">
+            <span class="theme-icon" aria-hidden="true">☾</span>
+            <span class="theme-label">Dark</span>
           </button>
         </div>
       </nav>

@@ -9,11 +9,16 @@
   const systemTheme = window.matchMedia("(prefers-color-scheme: dark)");
 
   const applyTheme = (preference) => {
+    root.dataset.themePreference = preference;
+
+    if (preference === "system") {
+      delete root.dataset.theme;
+    } else {
+      root.dataset.theme = preference;
+    }
+
     const effectiveTheme =
       preference === "system" ? (systemTheme.matches ? "dark" : "light") : preference;
-
-    root.dataset.themePreference = preference;
-    root.dataset.theme = effectiveTheme;
 
     themeOptions.forEach(button => {
       const isActive = button.dataset.themeOption === preference;
@@ -26,17 +31,21 @@
     }
   };
 
-  let themePreference = localStorage.getItem("portfolio-theme") || "system";
-  if (!["system", "light", "dark"].includes(themePreference)) {
-    themePreference = "system";
-  }
+  const savedTheme = localStorage.getItem("portfolio-theme");
+  let themePreference = ["light", "dark"].includes(savedTheme) ? savedTheme : "system";
 
   applyTheme(themePreference);
 
   themeOptions.forEach(button => {
     button.addEventListener("click", () => {
       themePreference = button.dataset.themeOption;
-      localStorage.setItem("portfolio-theme", themePreference);
+
+      if (themePreference === "system") {
+        localStorage.removeItem("portfolio-theme");
+      } else {
+        localStorage.setItem("portfolio-theme", themePreference);
+      }
+
       applyTheme(themePreference);
     });
   });
@@ -50,11 +59,23 @@
     navToggle.setAttribute("aria-expanded", String(Boolean(isOpen)));
   });
 
+  const closeMobileMenu = () => {
+    navMenu?.classList.remove("open");
+    navToggle?.setAttribute("aria-expanded", "false");
+  };
+
   document.querySelectorAll(".nav-menu a").forEach(link => {
-    link.addEventListener("click", () => {
-      navMenu?.classList.remove("open");
-      navToggle?.setAttribute("aria-expanded", "false");
-    });
+    link.addEventListener("click", closeMobileMenu);
+  });
+
+  document.addEventListener("click", event => {
+    if (!navMenu?.classList.contains("open")) return;
+    if (navMenu.contains(event.target) || navToggle?.contains(event.target)) return;
+    closeMobileMenu();
+  });
+
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape") closeMobileMenu();
   });
 
   const syncHeader = () => header?.classList.toggle("scrolled", window.scrollY > 8);

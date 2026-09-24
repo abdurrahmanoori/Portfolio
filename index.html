@@ -4,14 +4,17 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="Portfolio of Abdurrahman Noori, a software engineer specializing in .NET, Oracle, enterprise modernization, backend architecture, and database-driven systems." />
+  <meta name="color-scheme" content="light dark" />
   <meta name="theme-color" content="#f7f8fb" />
   <script>
     (() => {
-      const preference = localStorage.getItem("portfolio-theme") || "system";
-      const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-      document.documentElement.dataset.themePreference = preference;
-      document.documentElement.dataset.theme =
-        preference === "system" ? (systemDark ? "dark" : "light") : preference;
+      const preference = localStorage.getItem("portfolio-theme");
+      if (preference === "light" || preference === "dark") {
+        document.documentElement.dataset.theme = preference;
+        document.documentElement.dataset.themePreference = preference;
+      } else {
+        document.documentElement.dataset.themePreference = "system";
+      }
     })();
   </script>
   <title>Abdurrahman Noori | Software Developer</title>

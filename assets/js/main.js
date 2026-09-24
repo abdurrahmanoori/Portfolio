@@ -6,14 +6,31 @@
   const header = document.querySelector(".site-header");
   const year = document.querySelector("#year");
 
-  const storedTheme = localStorage.getItem("portfolio-theme");
-  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-  root.dataset.theme = storedTheme || (prefersDark ? "dark" : "light");
+  const themeColor = document.querySelector('meta[name="theme-color"]');
+
+  const syncThemeControl = () => {
+    const isDark = root.dataset.theme === "dark";
+    const icon = themeToggle?.querySelector(".theme-icon");
+    const label = themeToggle?.querySelector(".theme-label");
+
+    if (icon) icon.textContent = isDark ? "☀" : "☾";
+    if (label) label.textContent = isDark ? "Light" : "Dark";
+    if (themeToggle) {
+      const action = isDark ? "Switch to light mode" : "Switch to dark mode";
+      themeToggle.setAttribute("aria-label", action);
+      themeToggle.setAttribute("title", action);
+    }
+    if (themeColor) themeColor.setAttribute("content", isDark ? "#090d18" : "#f7f8fb");
+  };
+
+  root.dataset.theme = localStorage.getItem("portfolio-theme") || "light";
+  syncThemeControl();
 
   themeToggle?.addEventListener("click", () => {
     const nextTheme = root.dataset.theme === "dark" ? "light" : "dark";
     root.dataset.theme = nextTheme;
     localStorage.setItem("portfolio-theme", nextTheme);
+    syncThemeControl();
   });
 
   navToggle?.addEventListener("click", () => {

@@ -6,7 +6,13 @@
   <meta name="description" content="Portfolio of Abdurrahman Noori, a .NET and full-stack software developer focused on reliable web applications, databases, and enterprise systems." />
   <meta name="theme-color" content="#f7f8fb" />
   <script>
-    document.documentElement.dataset.theme = localStorage.getItem("portfolio-theme") || "light";
+    (() => {
+      const preference = localStorage.getItem("portfolio-theme") || "system";
+      const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      document.documentElement.dataset.themePreference = preference;
+      document.documentElement.dataset.theme =
+        preference === "system" ? (systemDark ? "dark" : "light") : preference;
+    })();
   </script>
   <title>Abdurrahman Noori | Software Developer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -35,10 +41,11 @@
           <a href="#projects">Projects</a>
           <a href="#experience">Experience</a>
           <a href="#contact">Contact</a>
-          <button class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch to dark mode">
-            <span class="theme-icon" aria-hidden="true">☾</span>
-            <span class="theme-label">Dark</span>
-          </button>
+          <div class="theme-switcher" role="group" aria-label="Theme preference">
+            <button type="button" class="theme-option" data-theme-option="system">Default</button>
+            <button type="button" class="theme-option" data-theme-option="light">Light</button>
+            <button type="button" class="theme-option" data-theme-option="dark">Dark</button>
+          </div>
         </div>
       </nav>
     </div>
